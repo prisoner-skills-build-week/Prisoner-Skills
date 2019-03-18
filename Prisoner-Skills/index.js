@@ -36,9 +36,9 @@ server.get("/api/PH", async (req, res) => {
   }
 });
 server.get("/api/PH2", async (req, res) => {
-  const allPH2 = await db("PH2");
+  const PH2 = await db("PH2");
   try {
-    res.status(200).json(allPH);
+    res.status(200).json(PH2);
   } catch (error) {
     res.status(500).json(error);
   }
