@@ -8,9 +8,12 @@ const server = express();
 
 server.use(express.json());
 server.use(helmet());
-// endpoints here
 
-server.POST("", (req, res) => {
+server.get('/', (req, res) => {
+  res.send('SANITY CHECK!!')
+})
+
+server.post("", (req, res) => {
   const placeholder = req.body;
 
   db.insert(placeholder)
@@ -24,7 +27,7 @@ server.POST("", (req, res) => {
     });
 });
 
-server.GET("/api/PH", async (req, res) => {
+server.get("/api/PH", async (req, res) => {
   const allPH = await db("PH");
   try {
     res.status(200).json(allPH);
@@ -32,7 +35,7 @@ server.GET("/api/PH", async (req, res) => {
     res.status(500).json(error);
   }
 });
-server.GET("/api/PH2", async (req, res) => {
+server.get("/api/PH2", async (req, res) => {
   const allPH2 = await db("PH2");
   try {
     res.status(200).json(allPH);
@@ -42,7 +45,7 @@ server.GET("/api/PH2", async (req, res) => {
 });
 
 
-server.GET("/api/PH/:id", (req, res) => {
+server.get("/api/PH/:id", (req, res) => {
   db("PH")
     .where({ id: req.params.id })
     .then(PH => {
@@ -53,7 +56,7 @@ server.GET("/api/PH/:id", (req, res) => {
       }
     });
 });
-server.GET("/api/PH2/:id", (req, res) => {
+server.get("/api/PH2/:id", (req, res) => {
   db("PH2")
     .where({ id: req.params.id })
     .then(PH2 => {
@@ -67,7 +70,7 @@ server.GET("/api/PH2/:id", (req, res) => {
 
 
 
-server.DELETE("/api/PH/:id", (req, res) => {
+server.delete("/api/PH/:id", (req, res) => {
   db("PH")
     .where({ id: req.params.id })
     .del()
@@ -76,7 +79,7 @@ server.DELETE("/api/PH/:id", (req, res) => {
     })
     .catch(err => res.status(500).json(err));
 });
-server.DELETE("/api/PH2/:id", (req, res) => {
+server.delete("/api/PH2/:id", (req, res) => {
   db("PH2")
     .where({ id: req.params.id })
     .del()
