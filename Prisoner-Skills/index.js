@@ -24,23 +24,41 @@ server.POST("", (req, res) => {
     });
 });
 
-server.GET("", async (req, res) => {
-  const placeholder = await db("PH");
+server.GET("/api/PH", async (req, res) => {
+  const allPH = await db("PH");
   try {
-    res.status(200).json(placeholder);
+    res.status(200).json(allPH);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+server.GET("/api/PH2", async (req, res) => {
+  const allPH2 = await db("PH2");
+  try {
+    res.status(200).json(allPH);
   } catch (error) {
     res.status(500).json(error);
   }
 });
 
 
-
 server.GET("/api/PH/:id", (req, res) => {
   db("PH")
     .where({ id: req.params.id })
-    .then(zoo => {
-      if (zoo) {
-        res.status(200).json(zoo);
+    .then(PH => {
+      if (PH) {
+        res.status(200).json(PH);
+      } else {
+        res.status(404).json({ message: "Couldn't find that PH" });
+      }
+    });
+});
+server.GET("/api/PH2/:id", (req, res) => {
+  db("PH2")
+    .where({ id: req.params.id })
+    .then(PH2 => {
+      if (PH2) {
+        res.status(200).json(PH2);
       } else {
         res.status(404).json({ message: "Couldn't find that PH" });
       }
@@ -51,6 +69,15 @@ server.GET("/api/PH/:id", (req, res) => {
 
 server.DELETE("/api/PH/:id", (req, res) => {
   db("PH")
+    .where({ id: req.params.id })
+    .del()
+    .then(value => {
+      res.status(200).json(value);
+    })
+    .catch(err => res.status(500).json(err));
+});
+server.DELETE("/api/PH2/:id", (req, res) => {
+  db("PH2")
     .where({ id: req.params.id })
     .del()
     .then(value => {
@@ -72,7 +99,17 @@ server.put('/api/PH/:id', async (req, res) => {
       res.status(500).json(error);
   }
 });
-
+server.put('/api/PH2/:id', async (req, res) => {
+  try {
+      const { id } = req.params;
+      const result = await db('PH2')
+          .where('id', id)
+          .update(req.body);
+      res.status(200).json(result);
+  } catch (error) {
+      res.status(500).json(error);
+  }
+});
 
 const port = 3300;
 server.listen(port, function() {
