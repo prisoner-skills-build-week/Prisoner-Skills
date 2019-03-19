@@ -19,14 +19,15 @@ export const ERROR = 'ERROR';
 
 
 export const getData = () => {
-    const inmate_info = axios.get('https://jsonplaceholder.typicode.com/users/get')
+    const inmates = axios.get('http://localhost:3333/items')
     return dispatch => {
         dispatch({ type: GETTING_DATA });
-        inmate_info
+        inmates
         .then(res => {
-            console.log('happening')
-            dispatch({ type: GET_DATA, payload: res})
+            console.log("making it here")
+            dispatch({ type: GET_DATA, payload: res.data})
         })
+        
         .catch(err => {
             dispatch({ type: ERROR, payload: err})
         })
@@ -35,7 +36,7 @@ export const getData = () => {
 
 
 export const createData = inmate => {
-    const newInmate = axios.post('https://jsonplaceholder.typicode.com/users/create', inmate);
+    const newInmate = axios.post('http://localhost:3333/items', inmate);
     return dispatch => {
         dispatch({ type: CREATING_DATA });
         newInmate

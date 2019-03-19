@@ -13,7 +13,8 @@ class InmateForm extends React.Component {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    handleAddInmate = _ => {
+    handleAddInmate = e => {
+        e.preventDefault()
         const {name, release, state } = this.state;
         this.props.createData({ name, release, state});
         this.setState({name: '', release: '', state: '' })
@@ -44,6 +45,8 @@ class InmateForm extends React.Component {
                     placeholder='state'
                     onChange={this.handleInputChanges}
                 />
+            
+            <button onClick={this.handleAddInmate}>Add Inmate</button>
             </form>
         )
     }
