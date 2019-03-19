@@ -1,10 +1,14 @@
+require("dotenv").config();
+
+
 const express = require("express");
+const server = express();
 const helmet = require("helmet");
 const knex = require("knex");
-const knexConfig = require("./knexfile");
+const knexConfig = require("../knexfile.js");
 const db = knex(knexConfig.development);
+const jwt = require("jsonwebtoken");
 
-const server = express();
 
 server.use(express.json());
 server.use(helmet());
@@ -114,7 +118,4 @@ server.put('/api/PH2/:id', async (req, res) => {
   }
 });
 
-const port = 3300;
-server.listen(port, function() {
-  console.log(`\n=== Web API Listening on http://localhost:${port} ===\n`);
-});
+module.exports = server
