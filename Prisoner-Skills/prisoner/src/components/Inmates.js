@@ -5,6 +5,9 @@ import SelectedInmate from './SelectedInmate'
 import UpdateInmateForm from './UpdateInmateForm'
 
 class Inmates extends React.Component {
+    
+
+
     handleDeleteInmate = () => {
         const {id} = this.props.inmateSelected;
         this.props.deleteData(id);
@@ -20,13 +23,13 @@ class Inmates extends React.Component {
     render() {
         return (
             <div className='inmate-container'>
-                <ul className='list'>
+                <div className='list'>
                     {this.props.inmates.map(inmate => {
                         return (
-                            <li onClick={() => this.handleShowInmate(inmate)} key={inmate.id}>{inmate.name}</li>
+                            <div className='individual-inmate' onClick={() => this.handleShowInmate(inmate)} key={inmate.id}>{inmate.name}</div>
                         )
                     })}
-                </ul>
+                </div>
                 {Object.keys(this.props.inmateSelected).length > 0 ? (
                     <SelectedInmate
                         handleShowInmate={this.handleShowInmate}

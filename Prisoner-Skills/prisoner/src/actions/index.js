@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+export const LOGIN_START = 'LOGIN_START';
+
 export const GETTING_DATA = 'GETTING_DATA';
 export const GET_DATA = 'GET_DATA';
 
@@ -16,6 +18,15 @@ export const SINGLE_INMATE = 'SINGLE_INMATE';
 export const TOGGLE_UPDATE_INMATE = 'TOGGLE_UPDATE_INMATE';
 
 export const ERROR = 'ERROR';
+
+
+export const login = creds => dispatch => {
+    dispatch({ type: LOGIN_START });
+    return axios.post('http://localhost:3333/items', creds).then(res => {
+      localStorage.setItem('token', res.data.payload);
+    });
+  };
+
 
 
 export const getData = () => {
