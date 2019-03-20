@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 
-const tokenService = require('./auth/token-service.js');
-const db = knex(knexConfig.development);
+const tokenService = require('../auth/token-service.js');
+const Users = require('../users/users-model.js');
 
 // for /api/auth
 router.post('/register', (req, res) => {
@@ -10,7 +10,7 @@ router.post('/register', (req, res) => {
   const hash = bcrypt.hashSync(user.password, 10); // 2 ^ n
   user.password = hash;
 
-  db.add(user)
+  Users.add(user)
     .then(saved => {
       res.status(201).json(saved);
     })
@@ -22,13 +22,13 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res) => {
   let { username, password } = req.body;
 
-  db.findBy({ username })
+  Users.findBy({ username })
     .first()
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = tokenService.generateToken(user); // new
         res.status(200).json({
-          message: `Welcome back ${user.username}!, `,
+          message: `Welcome back ${user.username}!`,
           token,
           roles: token.roles,
         });

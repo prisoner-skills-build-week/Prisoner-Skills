@@ -1,121 +1,21 @@
-require("dotenv").config();
+const express = require('express');
 
+const configureMiddleware = require('./middleware.js');
+const authRouter = require('../auth/auth-router.js');
+const usersRouter = require('../users/users-router.js');
 
-const express = require("express");
+// defined the secret
+const secrets = require('../config/secrets.js');
+
 const server = express();
-const helmet = require("helmet");
-const knex = require("knex");
-const knexConfig = require("../knexfile.js");
-const db = knex(knexConfig.development);
-const jwt = require("jsonwebtoken");
 
+configureMiddleware(server);
 
-server.use(express.json());
-server.use(helmet());
+server.use('/api/auth', authRouter);
+server.use('/api/users', usersRouter);
 
 server.get('/', (req, res) => {
-  res.send('SANITY CHECK!!')
-})
-
-server.post("", (req, res) => {
-  const placeholder = req.body;
-
-  db.insert(placeholder)
-    .into("PH")
-    .then(ids => {
-      console.log(ids);
-      res.status(201).json(ids);
-    })
-    .catch(err => {
-      res.status(500).json(err);
-    });
+  res.send("It's alive!");
 });
 
-server.get("/api/PH", async (req, res) => {
-  const allPH = await db("PH");
-  try {
-    res.status(200).json(allPH);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
-server.get("/api/PH2", async (req, res) => {
-  const PH2 = await db("PH2");
-  try {
-    res.status(200).json(PH2);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
-
-
-server.get("/api/PH/:id", (req, res) => {
-  db("PH")
-    .where({ id: req.params.id })
-    .then(PH => {
-      if (PH) {
-        res.status(200).json(PH);
-      } else {
-        res.status(404).json({ message: "Couldn't find that PH" });
-      }
-    });
-});
-server.get("/api/PH2/:id", (req, res) => {
-  db("PH2")
-    .where({ id: req.params.id })
-    .then(PH2 => {
-      if (PH2) {
-        res.status(200).json(PH2);
-      } else {
-        res.status(404).json({ message: "Couldn't find that PH" });
-      }
-    });
-});
-
-
-
-server.delete("/api/PH/:id", (req, res) => {
-  db("PH")
-    .where({ id: req.params.id })
-    .del()
-    .then(value => {
-      res.status(200).json(value);
-    })
-    .catch(err => res.status(500).json(err));
-});
-server.delete("/api/PH2/:id", (req, res) => {
-  db("PH2")
-    .where({ id: req.params.id })
-    .del()
-    .then(value => {
-      res.status(200).json(value);
-    })
-    .catch(err => res.status(500).json(err));
-});
-
-
-
-server.put('/api/PH/:id', async (req, res) => {
-  try {
-      const { id } = req.params;
-      const result = await db('PH')
-          .where('id', id)
-          .update(req.body);
-      res.status(200).json(result);
-  } catch (error) {
-      res.status(500).json(error);
-  }
-});
-server.put('/api/PH2/:id', async (req, res) => {
-  try {
-      const { id } = req.params;
-      const result = await db('PH2')
-          .where('id', id)
-          .update(req.body);
-      res.status(200).json(result);
-  } catch (error) {
-      res.status(500).json(error);
-  }
-});
-
-module.exports = server
+module.exports = server;
